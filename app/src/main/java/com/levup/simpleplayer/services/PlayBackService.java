@@ -3,8 +3,10 @@ package com.levup.simpleplayer.services;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -12,6 +14,8 @@ import java.io.PrintWriter;
 public class PlayBackService extends Service {
 
     public static final String TAG = PlayBackService.class.getSimpleName();
+
+    private final IBinder mBinder = new PlayBackBinder();
 
     public static Intent newInstance(Context context) {
         return new Intent(context, PlayBackService.class);
@@ -21,12 +25,21 @@ public class PlayBackService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate()");
+        Toast.makeText(this, "onCreate()", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Toast.makeText(this, "onDestroy()", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onDestroy()");
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        Toast.makeText(this, "onUnbind()", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "onUnbind()");
+        return super.onUnbind(intent);
     }
 
     public PlayBackService() {
@@ -34,7 +47,13 @@ public class PlayBackService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return mBinder;
     }
+
+    public class PlayBackBinder extends Binder {
+        public PlayBackService getService() {
+            return PlayBackService.this;
+        }
+    }
+
 }
