@@ -40,14 +40,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Intent playBackIntent = PlayBackService.newInstance(this);
+        playBackIntent.setAction(PlayBackService.ACTION_PLAY);
         startService(playBackIntent);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-               stopService(PlayBackService.newInstance(MainActivity.this));
-            }
-        }, 10000);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//               stopService(PlayBackService.newInstance(MainActivity.this));
+//            }
+//        }, 10000);
 
 
     }

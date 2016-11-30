@@ -1,21 +1,33 @@
 package com.levup.simpleplayer.services;
 
 import android.app.Service;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.levup.simpleplayer.BuildConfig;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 
-public class PlayBackService extends Service {
+public class PlayBackService extends Service implements MediaPlayer.OnPreparedListener {
+
+    public static final String ACTION_PLAY = BuildConfig.APPLICATION_ID + ".action.PLAY";
 
     public static final String TAG = PlayBackService.class.getSimpleName();
 
     private final IBinder mBinder = new PlayBackBinder();
+
+    private MediaPlayer mMediaPlayer = null;
 
     public static Intent newInstance(Context context) {
         return new Intent(context, PlayBackService.class);
@@ -29,18 +41,62 @@ public class PlayBackService extends Service {
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "onStartCommand(" + intent.getAction()+")");
+        if(intent.getAction() == null) return Service.START_STICKY;
+        if (intent.getAction().equals(ACTION_PLAY)) {
+            try {
+                mMediaPlayer = new MediaPlayer();
+                mMediaPlayer.setDataSource(this, getSongs());
+                mMediaPlayer.setOnPreparedListener(this);
+                mMediaPlayer.prepareAsync();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return Service.START_STICKY;
+    }
+
+    private Uri getSongs() {
+        ContentResolver contentResolver = getContentResolver();
+        Uri uri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Cursor cursor = contentResolver.query(uri, null, null, null, null);
+        if (cursor == null) {
+            // query failed, handle error.
+        } else if (!cursor.moveToFirst()) {
+            // no media on the device
+        } else {
+            int titleColumn = cursor.getColumnIndex(android.provider.MediaStore.Audio.Media.TITLE);
+            int idColumn = cursor.getColumnIndex(android.provider.MediaStore.Audio.Media._ID);
+            do {
+                long thisId = cursor.getLong(idColumn);
+                String thisTitle = cursor.getString(titleColumn);
+                Uri contentUri = ContentUris.withAppendedId(
+                        android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        thisId);
+
+                return contentUri;
+                // ...process entry...
+            } while (cursor.moveToNext());
+        }
+        return null;
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
+
         Toast.makeText(this, "onDestroy()", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onDestroy()");
     }
 
-    @Override
+    /*@Override
     public boolean onUnbind(Intent intent) {
         Toast.makeText(this, "onUnbind()", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onUnbind()");
         return super.onUnbind(intent);
-    }
+    }*/
 
     public PlayBackService() {
     }
@@ -48,6 +104,11 @@ public class PlayBackService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        mMediaPlayer.start();
     }
 
     public class PlayBackBinder extends Binder {
