@@ -1,5 +1,7 @@
 package com.levup.simpleplayer.services;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -15,6 +17,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.levup.simpleplayer.BuildConfig;
+import com.levup.simpleplayer.MainActivity;
+import com.levup.simpleplayer.R;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -24,6 +28,7 @@ public class PlayBackService extends Service implements MediaPlayer.OnPreparedLi
     public static final String ACTION_PLAY = BuildConfig.APPLICATION_ID + ".action.PLAY";
 
     public static final String TAG = PlayBackService.class.getSimpleName();
+    private static final int NOTIFICATION_ID = 101;
 
     private final IBinder mBinder = new PlayBackBinder();
 
@@ -109,6 +114,21 @@ public class PlayBackService extends Service implements MediaPlayer.OnPreparedLi
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         mMediaPlayer.start();
+
+        PendingIntent pi = PendingIntent.getActivity(
+                getApplicationContext(),
+                0,
+                new Intent(getApplicationContext(), MainActivity.class),
+                PendingIntent.FLAG_NO_CREATE);
+
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("My notification")
+                        .setContentText("Hello World!")
+                        .setContentIntent(pi);
+
+        startForeground(NOTIFICATION_ID, builder.build());
     }
 
     public class PlayBackBinder extends Binder {
