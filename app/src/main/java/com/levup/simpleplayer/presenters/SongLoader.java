@@ -9,7 +9,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 
 import com.levup.simpleplayer.PreferencesUtility;
-import com.levup.simpleplayer.model.Song;
+import com.levup.simpleplayer.models.Song;
 
 import java.util.ArrayList;
 import java.util.List;

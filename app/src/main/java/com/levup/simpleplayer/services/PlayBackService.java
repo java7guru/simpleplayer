@@ -1,6 +1,5 @@
 package com.levup.simpleplayer.services;
 
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentResolver;
@@ -17,11 +16,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.levup.simpleplayer.BuildConfig;
-import com.levup.simpleplayer.MainActivity;
+import com.levup.simpleplayer.views.MainActivity;
 import com.levup.simpleplayer.R;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
 
 public class PlayBackService extends Service implements MediaPlayer.OnPreparedListener {
 
