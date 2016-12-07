@@ -13,6 +13,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.view.Surface;
 import android.widget.Toast;
 
 import com.levup.simpleplayer.BuildConfig;
@@ -135,6 +136,11 @@ public class PlayBackService extends Service implements MediaPlayer.OnPreparedLi
                 android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 songId);
         try {
+            if(mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+                mMediaPlayer.stop();
+                mMediaPlayer.release();
+                mMediaPlayer = null;
+            }
             mMediaPlayer = new MediaPlayer();
             mMediaPlayer.setDataSource(this, contentUri);
             mMediaPlayer.setOnPreparedListener(this);
