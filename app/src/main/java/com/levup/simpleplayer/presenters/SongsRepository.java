@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.levup.simpleplayer.PreferencesUtility;
@@ -79,6 +80,24 @@ public class SongsRepository {
         cursor.close();
         cursor = null;
         return list;
+    }
+
+    public static String getAlbumCover(@NonNull Context context, long albumId) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                new String[] {MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
+                MediaStore.Audio.Albums._ID+ "=?",
+                new String[] {String.valueOf(albumId)},
+                null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            return cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+        }
+        if(cursor != null) {
+            cursor.close();
+            cursor = null;
+        }
+        return "";
     }
 
     public static Song getSongFromPath(String songPath, Context context) {

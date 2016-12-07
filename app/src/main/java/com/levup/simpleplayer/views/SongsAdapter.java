@@ -11,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.levup.simpleplayer.R;
 import com.levup.simpleplayer.models.Song;
+import com.levup.simpleplayer.presenters.SongsRepository;
 
 import java.util.List;
 
@@ -66,7 +68,14 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongViewHold
             mSong = song;
             mArtistTextView.setText(song.artistName);
             mTitleTextView.setText(song.title);
-            mCoverImageView.setImageDrawable(new ColorDrawable(Color.GRAY));
+            String cover = SongsRepository.getAlbumCover(itemView.getContext(), song.albumId);
+            Glide
+                    .with(itemView.getContext())
+                    .load(cover)
+                    .centerCrop()
+                    .placeholder(new ColorDrawable(Color.GRAY))
+                    .crossFade()
+                    .into(mCoverImageView);
         }
 
         public Song getSong() {
