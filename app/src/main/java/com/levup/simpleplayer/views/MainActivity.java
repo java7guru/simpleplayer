@@ -106,6 +106,16 @@ public class MainActivity extends AppCompatActivity implements SongsView {
         adapter.setDataSource(songList);
         mProgressBar.setVisibility(View.GONE);
         mRecyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(item -> {
+            final SongsAdapter.SongViewHolder holder =
+                    (SongsAdapter.SongViewHolder) mRecyclerView.findContainingViewHolder(item);
+            if(holder == null) return;
+            final Song song = holder.getSong();
+            final long songId = song.id;
+            if(mBound) {
+                mService.playSongId(songId);
+            }
+        });
     }
 
 }

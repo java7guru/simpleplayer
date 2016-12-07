@@ -26,6 +26,12 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongViewHold
 
     private List<Song> mDataSource = null;
 
+    private View.OnClickListener mOnItemClickListener;
+
+    public void setOnItemClickListener(View.OnClickListener onClickListener) {
+        mOnItemClickListener = onClickListener;
+    }
+
     public void setDataSource(List<Song> dataSource) {
         mDataSource = dataSource;
         notifyDataSetChanged();
@@ -42,6 +48,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongViewHold
     public void onBindViewHolder(SongViewHolder holder, int position) {
         final Song song = mDataSource.get(position);
         holder.bind(song);
+        holder.itemView.setOnClickListener(mOnItemClickListener);
     }
 
     @Override
@@ -68,7 +75,9 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongViewHold
             mSong = song;
             mArtistTextView.setText(song.artistName);
             mTitleTextView.setText(song.title);
-            String cover = SongsRepository.getAlbumCover(itemView.getContext(), song.albumId);
+            String cover = SongsRepository.getAlbumCover(
+                    itemView.getContext(),
+                    song.albumId);
             Glide
                     .with(itemView.getContext())
                     .load(cover)

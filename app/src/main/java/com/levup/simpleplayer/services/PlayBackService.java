@@ -16,6 +16,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.levup.simpleplayer.BuildConfig;
+import com.levup.simpleplayer.models.Song;
+import com.levup.simpleplayer.presenters.SongsRepository;
 import com.levup.simpleplayer.views.MainActivity;
 import com.levup.simpleplayer.R;
 
@@ -50,7 +52,7 @@ public class PlayBackService extends Service implements MediaPlayer.OnPreparedLi
                 mMediaPlayer = new MediaPlayer();
                 mMediaPlayer.setDataSource(this, getSongs());
                 mMediaPlayer.setOnPreparedListener(this);
-                mMediaPlayer.prepareAsync();
+               // mMediaPlayer.prepareAsync();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -125,6 +127,21 @@ public class PlayBackService extends Service implements MediaPlayer.OnPreparedLi
                         .setContentIntent(pi);
 
         startForeground(NOTIFICATION_ID, builder.build());
+    }
+
+    public void playSongId(long songId) {
+       // Song song = SongsRepository.getSongForID(this, songId);
+        Uri contentUri = ContentUris.withAppendedId(
+                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                songId);
+        try {
+            mMediaPlayer = new MediaPlayer();
+            mMediaPlayer.setDataSource(this, contentUri);
+            mMediaPlayer.setOnPreparedListener(this);
+            mMediaPlayer.prepareAsync();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public class PlayBackBinder extends Binder {
