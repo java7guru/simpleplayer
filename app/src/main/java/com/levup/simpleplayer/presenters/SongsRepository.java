@@ -14,7 +14,7 @@ import com.levup.simpleplayer.models.Song;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SongLoader {
+public class SongsRepository {
 
     private static final long[] sEmptyList = new long[0];
 

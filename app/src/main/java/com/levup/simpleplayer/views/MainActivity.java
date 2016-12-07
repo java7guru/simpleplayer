@@ -9,7 +9,9 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import com.levup.simpleplayer.R;
 import com.levup.simpleplayer.models.Song;
@@ -44,10 +46,16 @@ public class MainActivity extends AppCompatActivity implements SongsView {
         }
     };
 
+    private RecyclerView mRecyclerView;
+    private ProgressBar mProgressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         mPresenter.onAttachToView(this);
         mPresenter.loadAllSongs();
@@ -56,12 +64,6 @@ public class MainActivity extends AppCompatActivity implements SongsView {
         playBackIntent.setAction(PlayBackService.ACTION_PLAY);
         startService(playBackIntent);
 
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//               stopService(PlayBackService.newInstance(MainActivity.this));
-//            }
-//        }, 10000);
 
 
     }

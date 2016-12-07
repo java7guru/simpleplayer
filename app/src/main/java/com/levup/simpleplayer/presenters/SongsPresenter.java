@@ -29,36 +29,15 @@ public class SongsPresenter {
     private Subscription subscription = null;
 
     public void loadAllSongs() {
-
-        subscription = Observable.just(SongLoader.getAllSongs(mView.getContext()))
+        subscription = Observable.just(SongsRepository.getAllSongs(mView.getContext()))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(songs -> { mView.onAllSongsLoaded(songs);},
                         Throwable::printStackTrace);
 
-        new AsyncTask<Void, Void, List<Song>>() {
-
-            @Override
-            protected List<Song> doInBackground(Void... voids) {
-                try {
-                    return SongLoader.getAllSongs(mView.getContext());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return new ArrayList<Song>();
-            }
-
-            @Override
-            protected void onPostExecute(List<Song> songs) {
-                super.onPostExecute(songs);
-                if(mView == null) return;
-                mView.onAllSongsLoaded(songs);
-            }
-        }.execute();
     }
 
     public void onDetach() {
-       /// mView = null;
         if(subscription != null)
             subscription.unsubscribe();
     }
