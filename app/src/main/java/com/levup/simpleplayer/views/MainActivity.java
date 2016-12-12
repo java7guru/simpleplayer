@@ -26,6 +26,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SongsView {
 
+    public static Intent newIntent(Context context) {
+        return new Intent(context, MainActivity.class);
+    }
+
     public static final String TAG = MainActivity.class.getSimpleName();
     private static final int SPAN_COUNT = 2;
 
