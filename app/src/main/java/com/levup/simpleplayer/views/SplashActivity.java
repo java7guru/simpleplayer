@@ -4,15 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 
-public class SplashActivity extends Activity {
+import com.levup.simpleplayer.R;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-//        startActivity(MainActivity.newIntent(this));
-//        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-    }
+public class SplashActivity extends Activity {
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -20,8 +14,8 @@ public class SplashActivity extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(MainActivity.newIntent(SplashActivity.this));
-                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                startActivity(MenuActivity.newIntent(SplashActivity.this));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         }, 1000);
     }

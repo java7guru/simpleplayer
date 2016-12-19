@@ -1,5 +1,6 @@
 package com.levup.simpleplayer.views;
 
+import android.animation.ObjectAnimator;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 
 import com.levup.simpleplayer.R;
@@ -66,8 +69,28 @@ public class MainActivity extends AppCompatActivity implements SongsView {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
+        mProgressBar.setAlpha(0);
+        mProgressBar.animate().alpha(1).setDuration(1000).start();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ObjectAnimator animator = ObjectAnimator.ofFloat(
+                        mProgressBar,
+                        View.TRANSLATION_Y,
+                        -2000,
+                        0);
+
+                animator.setDuration(4000);
+                animator.start();
+            }
+        }, 3000);
+
+
+
+
         mPresenter.onAttachToView(this);
-        mPresenter.loadAllSongs();
+        ///mPresenter.loadAllSongs();
 
         Intent playBackIntent = PlayBackService.newInstance(this);
         playBackIntent.setAction(PlayBackService.ACTION_PLAY);
