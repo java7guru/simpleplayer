@@ -25,7 +25,7 @@ import com.levup.simpleplayer.views.base.BaseActivity;
 import com.levup.simpleplayer.views.fragments.MainFragment;
 import com.levup.simpleplayer.views.fragments.PlaylistsFragment;
 
-public class MenuActivity extends BaseActivity
+public class MenuActivity extends MusicActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         MenuInteractionListener {
 
@@ -39,6 +39,7 @@ public class MenuActivity extends BaseActivity
         setContentView(R.layout.activity_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         addFragment(MainFragment.newInstance(3));
 
@@ -105,9 +106,6 @@ public class MenuActivity extends BaseActivity
             replaceFragment(PlaylistsFragment.newInstance());
         } else if (id == R.id.nav_slideshow) {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_menu);
-            if(fragment instanceof MainFragment) {
-                ((MainFragment)fragment).showText("CLICK");
-            }
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {

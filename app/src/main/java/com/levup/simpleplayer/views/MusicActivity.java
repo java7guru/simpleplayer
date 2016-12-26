@@ -24,10 +24,11 @@ import com.levup.simpleplayer.R;
 import com.levup.simpleplayer.models.Song;
 import com.levup.simpleplayer.presenters.SongsPresenter;
 import com.levup.simpleplayer.services.PlayBackService;
+import com.levup.simpleplayer.views.base.BaseActivity;
 
 import java.util.List;
 
-public class MusicActivity extends AppCompatActivity {
+public class MusicActivity extends BaseActivity {
 
     protected PlayBackService mService;
     protected boolean mBound = false;
