@@ -6,6 +6,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,9 @@ import android.widget.TextView;
 
 import com.levup.simpleplayer.R;
 import com.levup.simpleplayer.views.MenuInteractionListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,6 +28,8 @@ public class MainFragment extends Fragment {
     private MenuInteractionListener mListener = null;
 
     public static final String SOME_VALUE = "SOME_VALUE";
+
+    private ViewPager viewPager;
 
     public static MainFragment newInstance(int value) {
         Bundle args = new Bundle();
@@ -50,17 +58,19 @@ public class MainFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.btn).setOnClickListener(btnView -> {
-            final int value = getArguments().getInt(SOME_VALUE);
-            mListener.onMainFragmentEventListener(value);
-        });
+        viewPager = (ViewPager) view.findViewById(R.id.pager);
+        if (viewPager != null) {
+            setupViewPager(viewPager);
+            viewPager.setOffscreenPageLimit(2);
+        }
     }
 
-    public void showText(CharSequence text) {
-        final View view = getView();
-        if(view == null) return;
-        final TextView textView = (TextView) view.findViewById(R.id.tv);
-        textView.setText(text);
+    private void setupViewPager(ViewPager viewPager) {
+        Adapter adapter = new Adapter(getChildFragmentManager());
+        adapter.addFragment(new SongsFragment(), this.getString(R.string.songs));
+        adapter.addFragment(new AlbumFragment(), this.getString(R.string.albums));
+        adapter.addFragment(new ArtistFragment(), this.getString(R.string.artists));
+        viewPager.setAdapter(adapter);
     }
 
     @Override
@@ -68,4 +78,34 @@ public class MainFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+    static class Adapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragments = new ArrayList<>();
+        private final List<String> mFragmentTitles = new ArrayList<>();
+
+        public Adapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragments.add(fragment);
+            mFragmentTitles.add(title);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragments.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitles.get(position);
+        }
+    }
 }
+

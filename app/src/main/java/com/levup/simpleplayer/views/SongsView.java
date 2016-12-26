@@ -12,8 +12,8 @@ import java.util.List;
 
 public interface SongsView {
 
-    public Context getContext();
+    Context getContext();
 
-    public void onAllSongsLoaded(List<Song> songList);
+    void onAllSongsLoaded(List<Song> songList);
 
 }
