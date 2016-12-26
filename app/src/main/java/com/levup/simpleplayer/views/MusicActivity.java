@@ -30,8 +30,8 @@ import java.util.List;
 
 public class MusicActivity extends BaseActivity {
 
-    protected PlayBackService mService;
-    protected boolean mBound = false;
+    public PlayBackService mService;
+    public boolean mBound = false;
 
     private ServiceConnection mConnection = new ServiceConnection() {
 
