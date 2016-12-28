@@ -54,7 +54,6 @@ public class SongsFragment extends Fragment implements SongsView {
 
     @Override
     public void onAllSongsLoaded(List<Song> songList) {
-
         mSongsAdapter.setDataSource(songList);
         mSongsAdapter.setOnItemClickListener(view ->{
             final SongsAdapter.SongViewHolder holder =
