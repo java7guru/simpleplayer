@@ -12,10 +12,13 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.levup.simpleplayer.R;
 import com.levup.simpleplayer.views.MenuInteractionListener;
+import com.levup.simpleplayer.views.MusicActivity;
+import com.levup.simpleplayer.views.MusicActivity.PlayBackInteraction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +30,13 @@ public class MainFragment extends Fragment {
 
     private MenuInteractionListener mListener = null;
 
+    private PlayBackInteraction mPlayBackInteraction;
+
     public static final String SOME_VALUE = "SOME_VALUE";
 
     private ViewPager viewPager;
+
+    private ImageView mPlayPauseButton;
 
     public static MainFragment newInstance(int value) {
         Bundle args = new Bundle();
@@ -45,12 +52,21 @@ public class MainFragment extends Fragment {
         if(activity instanceof MenuInteractionListener) {
             mListener = (MenuInteractionListener) activity;
         }
+        initPlayBackInteraction();
+    }
+
+    private void initPlayBackInteraction() {
+        if(getActivity() instanceof MusicActivity) {
+            mPlayBackInteraction = ((MusicActivity) getActivity())
+                    .getPlayBackInteraction();
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
+        mPlayPauseButton = (ImageView) view.findViewById(R.id.btnPlay);
         return view;
     }
 
@@ -63,6 +79,20 @@ public class MainFragment extends Fragment {
             setupViewPager(viewPager);
             viewPager.setOffscreenPageLimit(2);
         }
+
+        mPlayPauseButton.setOnClickListener(iv -> {
+            if(mPlayBackInteraction == null) {
+                initPlayBackInteraction();
+            }
+            if(mPlayBackInteraction != null) {
+                if(mPlayBackInteraction.isPaused()) {
+                    mPlayBackInteraction.play();
+                } else {
+                    mPlayBackInteraction.pause();
+                }
+            }
+        });
+
     }
 
     private void setupViewPager(ViewPager viewPager) {

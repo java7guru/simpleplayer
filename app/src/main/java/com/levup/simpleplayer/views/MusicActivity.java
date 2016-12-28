@@ -8,6 +8,7 @@ import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -30,8 +31,25 @@ import java.util.List;
 
 public class MusicActivity extends BaseActivity {
 
-    public PlayBackService mService;
-    public boolean mBound = false;
+    public interface PlayBackInteraction {
+
+        boolean play();
+
+        void pause();
+
+        void play(long songId);
+
+        boolean isPaused();
+
+    }
+
+    private PlayBackService mService;
+    private boolean mBound = false;
+
+    @Nullable
+    public PlayBackInteraction getPlayBackInteraction() {
+        return mService;
+    }
 
     private ServiceConnection mConnection = new ServiceConnection() {
 

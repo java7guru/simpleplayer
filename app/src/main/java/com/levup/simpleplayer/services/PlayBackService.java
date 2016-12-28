@@ -19,7 +19,9 @@ import com.levup.simpleplayer.BuildConfig;
 import com.levup.simpleplayer.views.MusicActivity;
 import com.levup.simpleplayer.R;
 
-public class PlayBackService extends Service implements MediaPlayer.OnPreparedListener {
+public class PlayBackService extends Service implements
+        MediaPlayer.OnPreparedListener,
+        MusicActivity.PlayBackInteraction {
 
     public static final String ACTION_PLAY = BuildConfig.APPLICATION_ID + ".action.PLAY";
 
@@ -29,6 +31,8 @@ public class PlayBackService extends Service implements MediaPlayer.OnPreparedLi
     private final IBinder mBinder = new PlayBackBinder();
 
     private MediaPlayer mMediaPlayer = null;
+
+    private boolean isPaused;
 
     public static Intent newInstance(Context context) {
         return new Intent(context, PlayBackService.class);
@@ -145,6 +149,44 @@ public class PlayBackService extends Service implements MediaPlayer.OnPreparedLi
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean play() {
+        try {
+            if(mMediaPlayer != null && isPaused) {
+                mMediaPlayer.start();
+                isPaused = false;
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+
+
+    @Override
+    public void pause() {
+        try {
+            if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+                mMediaPlayer.pause();
+                isPaused = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void play(long songId) {
+        playSongId(songId);
     }
 
     public class PlayBackBinder extends Binder {
