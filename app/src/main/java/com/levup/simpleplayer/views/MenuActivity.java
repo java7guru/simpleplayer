@@ -1,14 +1,17 @@
 package com.levup.simpleplayer.views;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,14 +23,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 import com.levup.simpleplayer.R;
 import com.levup.simpleplayer.views.base.BaseActivity;
 import com.levup.simpleplayer.views.fragments.MainFragment;
 import com.levup.simpleplayer.views.fragments.PlaylistsFragment;
 
+import rx.Observable;
+import rx.functions.Action1;
+import rx.functions.Func1;
+
+
 public class MenuActivity extends MusicActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         MenuInteractionListener {
+
+    private Observable<CharSequence> queryObservable = null;
+
+    @Nullable
+    public Observable<CharSequence> getQueryObservable() {
+        return queryObservable;
+    }
 
     public static Intent newIntent(Context context) {
         return new Intent(context, MenuActivity.class);
@@ -39,7 +55,6 @@ public class MenuActivity extends MusicActivity
         setContentView(R.layout.activity_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         addFragment(MainFragment.newInstance(3));
 
@@ -74,8 +89,15 @@ public class MenuActivity extends MusicActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setQueryHint("Search...");
+
+        queryObservable = RxSearchView.queryTextChanges(searchView);
+
         return true;
     }
 
@@ -87,9 +109,7 @@ public class MenuActivity extends MusicActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
 
         return super.onOptionsItemSelected(item);
     }

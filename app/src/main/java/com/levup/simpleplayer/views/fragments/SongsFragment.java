@@ -58,6 +58,10 @@ public class SongsFragment extends Fragment implements SongsView {
         return inflater.inflate(R.layout.fragment_songs, container, false);
     }
 
+    public void filter(CharSequence query) {
+        mSongsAdapter.getDataSource();
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mPresenter.onAttachToView(this);

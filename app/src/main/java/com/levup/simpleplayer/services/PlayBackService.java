@@ -170,8 +170,6 @@ public class PlayBackService extends Service implements
         return isPaused;
     }
 
-
-
     @Override
     public void pause() {
         try {
