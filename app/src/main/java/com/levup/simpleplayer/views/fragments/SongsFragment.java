@@ -3,10 +3,12 @@ package com.levup.simpleplayer.views.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +16,18 @@ import android.view.ViewGroup;
 import com.levup.simpleplayer.R;
 import com.levup.simpleplayer.models.Song;
 import com.levup.simpleplayer.presenters.SongsPresenter;
+import com.levup.simpleplayer.views.MenuActivity;
 import com.levup.simpleplayer.views.MusicActivity;
 import com.levup.simpleplayer.views.MusicActivity.PlayBackInteraction;
 import com.levup.simpleplayer.views.SongsAdapter;
 import com.levup.simpleplayer.views.SongsView;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
+import rx.Subscription;
+import rx.functions.Func1;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +42,8 @@ public class SongsFragment extends Fragment implements SongsView {
     private static final int SPAN_COUNT = 2;
 
     private SongsPresenter mPresenter = new SongsPresenter();
+
+    private Observable<Song> mSongsObservable = null;
 
     private RecyclerView mRecyclerView = null;
     private SongsAdapter mSongsAdapter = new SongsAdapter();
@@ -58,10 +68,6 @@ public class SongsFragment extends Fragment implements SongsView {
         return inflater.inflate(R.layout.fragment_songs, container, false);
     }
 
-    public void filter(CharSequence query) {
-        mSongsAdapter.getDataSource();
-    }
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mPresenter.onAttachToView(this);
@@ -72,6 +78,20 @@ public class SongsFragment extends Fragment implements SongsView {
                 SPAN_COUNT);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setHasFixedSize(true);
+
+        new Handler().postDelayed(() -> {
+            if(getActivity() instanceof MenuActivity) {
+                MenuActivity menuActivity = (MenuActivity) getActivity();
+                menuActivity.getQueryObservable()
+                        .doOnNext( query -> Log.d("TAG", query.toString()))
+                        .flatMap(query -> mSongsObservable.filter(song -> song.title.contains(query) ))
+                        .toList()
+                        .subscribe(songList -> {
+                            mSongsAdapter.setDataSource(songList);});
+
+            }
+        }, 2000);
+
     }
 
     @Override
@@ -94,6 +114,9 @@ public class SongsFragment extends Fragment implements SongsView {
 
         });
         mRecyclerView.setAdapter(mSongsAdapter);
+
+
+        mSongsObservable = Observable.from(songList);
     }
 
     @Override
