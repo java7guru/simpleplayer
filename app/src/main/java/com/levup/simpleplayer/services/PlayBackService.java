@@ -190,6 +190,18 @@ public class PlayBackService extends Service implements
     }
 
     @Override
+    public void onUserSeek(int progress) {
+        try {
+            if(mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+                int seekPosition = (mMediaPlayer.getDuration() / 100) * progress;
+                mMediaPlayer.seekTo(seekPosition);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void pause() {
         try {
             if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {

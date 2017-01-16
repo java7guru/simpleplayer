@@ -79,6 +79,28 @@ public class MainFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int position, boolean fromUser) {
+                if(fromUser) {
+                    if(mPlayBackInteraction != null) {
+                        mPlayBackInteraction.onUserSeek(position);
+                    }
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
         viewPager = (ViewPager) view.findViewById(R.id.pager);
         if (viewPager != null) {
             setupViewPager(viewPager);

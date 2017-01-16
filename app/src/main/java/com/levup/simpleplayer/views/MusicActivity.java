@@ -46,6 +46,8 @@ public class MusicActivity extends BaseActivity {
 
         Observable<Integer> gerDurationObservable();
 
+        void onUserSeek(int progress);
+
     }
 
     private PlayBackService mService;
