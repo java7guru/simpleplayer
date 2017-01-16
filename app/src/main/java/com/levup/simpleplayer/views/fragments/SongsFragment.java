@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +21,9 @@ import com.levup.simpleplayer.views.MusicActivity.PlayBackInteraction;
 import com.levup.simpleplayer.views.SongsAdapter;
 import com.levup.simpleplayer.views.SongsView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
-import rx.Subscription;
-import rx.functions.Func1;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -83,12 +79,11 @@ public class SongsFragment extends Fragment implements SongsView {
             if(getActivity() instanceof MenuActivity) {
                 MenuActivity menuActivity = (MenuActivity) getActivity();
                 menuActivity.getQueryObservable()
-                        .doOnNext( query -> Log.d("TAG", query.toString()))
-                        .flatMap(query -> mSongsObservable.filter(song -> song.title.contains(query) ))
-                        .toList()
-                        .subscribe(songList -> {
-                            mSongsAdapter.setDataSource(songList);});
-
+                        .flatMap(query ->
+                                mSongsObservable
+                                .filter(song -> song.title.contains(query))
+                                .toList())
+                        .subscribe(songList -> mSongsAdapter.setDataSource(songList));
             }
         }, 2000);
 
