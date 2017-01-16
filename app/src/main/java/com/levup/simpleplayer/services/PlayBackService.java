@@ -19,6 +19,9 @@ import com.levup.simpleplayer.BuildConfig;
 import com.levup.simpleplayer.views.MusicActivity;
 import com.levup.simpleplayer.R;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class PlayBackService extends Service implements
         MediaPlayer.OnPreparedListener,
         MusicActivity.PlayBackInteraction {
@@ -157,6 +160,10 @@ public class PlayBackService extends Service implements
             if(mMediaPlayer != null && isPaused) {
                 mMediaPlayer.start();
                 isPaused = false;
+
+                Timer timer = new Timer();
+                timer.scheduleAtFixedRate(new DurationTimerTask(), 0, 1000);
+
                 return true;
             }
         } catch (Exception e) {
@@ -179,6 +186,14 @@ public class PlayBackService extends Service implements
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private class DurationTimerTask extends TimerTask {
+
+        @Override
+        public void run() {
+            Log.d("TAG", "run()");
         }
     }
 

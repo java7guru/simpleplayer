@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.levup.simpleplayer.R;
@@ -37,6 +38,8 @@ public class MainFragment extends Fragment {
     private ViewPager viewPager;
 
     private ImageView mPlayPauseButton;
+
+    private SeekBar mSeekBar = null;
 
     public static MainFragment newInstance(int value) {
         Bundle args = new Bundle();
@@ -67,6 +70,11 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
         mPlayPauseButton = (ImageView) view.findViewById(R.id.btnPlay);
+        mSeekBar = (SeekBar) view.findViewById(R.id.sb);
+
+        mSeekBar.setProgress(50);
+
+
         return view;
     }
 

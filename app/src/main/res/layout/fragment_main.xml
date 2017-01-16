@@ -66,6 +66,7 @@
             android:layout_height="wrap_content" />
 
         <SeekBar
+            android:max="100"
             android:progress="100"
             android:id="@id/sb"
             android:layout_alignParentBottom="true"

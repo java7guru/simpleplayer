@@ -23,7 +23,14 @@ import com.levup.simpleplayer.views.SongsView;
 
 import java.util.List;
 
+import rx.Completable;
 import rx.Observable;
+import rx.Scheduler;
+import rx.Single;
+import rx.Subscriber;
+import rx.exceptions.MissingBackpressureException;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -86,7 +93,6 @@ public class SongsFragment extends Fragment implements SongsView {
                         .subscribe(songList -> mSongsAdapter.setDataSource(songList));
             }
         }, 2000);
-
     }
 
     @Override
