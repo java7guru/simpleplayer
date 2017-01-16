@@ -11,6 +11,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.annotation.IntegerRes;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -21,6 +22,11 @@ import com.levup.simpleplayer.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Action1;
+import rx.subjects.PublishSubject;
 
 public class PlayBackService extends Service implements
         MediaPlayer.OnPreparedListener,
@@ -36,6 +42,8 @@ public class PlayBackService extends Service implements
     private MediaPlayer mMediaPlayer = null;
 
     private boolean isPaused;
+
+    private PublishSubject<Integer> mDurationSubject = PublishSubject.create();
 
     public static Intent newInstance(Context context) {
         return new Intent(context, PlayBackService.class);
@@ -177,6 +185,11 @@ public class PlayBackService extends Service implements
     }
 
     @Override
+    public Observable<Integer> gerDurationObservable() {
+        return mDurationSubject;
+    }
+
+    @Override
     public void pause() {
         try {
             if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
@@ -195,8 +208,10 @@ public class PlayBackService extends Service implements
 
         @Override
         public void run() {
-            Log.d("TAG", "run()");
+            int current = (mMediaPlayer.getCurrentPosition() * 100) / mMediaPlayer.getDuration();
+            mDurationSubject.onNext(current);
         }
+
     }
 
     @Override

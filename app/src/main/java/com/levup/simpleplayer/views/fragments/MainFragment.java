@@ -4,6 +4,7 @@ package com.levup.simpleplayer.views.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -71,10 +72,6 @@ public class MainFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
         mPlayPauseButton = (ImageView) view.findViewById(R.id.btnPlay);
         mSeekBar = (SeekBar) view.findViewById(R.id.sb);
-
-        mSeekBar.setProgress(50);
-
-
         return view;
     }
 
@@ -95,12 +92,14 @@ public class MainFragment extends Fragment {
             if(mPlayBackInteraction != null) {
                 if(mPlayBackInteraction.isPaused()) {
                     mPlayBackInteraction.play();
+                    mPlayBackInteraction
+                            .gerDurationObservable()
+                            .subscribe(position -> { mSeekBar.setProgress(position); });
                 } else {
                     mPlayBackInteraction.pause();
                 }
             }
         });
-
     }
 
     private void setupViewPager(ViewPager viewPager) {

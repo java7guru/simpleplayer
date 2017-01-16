@@ -29,6 +29,9 @@ import com.levup.simpleplayer.views.base.BaseActivity;
 
 import java.util.List;
 
+import rx.Observable;
+import rx.subjects.PublishSubject;
+
 public class MusicActivity extends BaseActivity {
 
     public interface PlayBackInteraction {
@@ -40,6 +43,8 @@ public class MusicActivity extends BaseActivity {
         void play(long songId);
 
         boolean isPaused();
+
+        Observable<Integer> gerDurationObservable();
 
     }
 
