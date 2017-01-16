@@ -161,7 +161,6 @@ public class PlayBackService extends Service implements
                 mMediaPlayer.start();
                 isPaused = false;
 
-                Timer timer = new Timer();
                 timer.scheduleAtFixedRate(new DurationTimerTask(), 0, 1000);
 
                 return true;
@@ -183,11 +182,14 @@ public class PlayBackService extends Service implements
             if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
                 mMediaPlayer.pause();
                 isPaused = true;
+                timer.cancel();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    private final Timer timer = new Timer();
 
     private class DurationTimerTask extends TimerTask {
 
