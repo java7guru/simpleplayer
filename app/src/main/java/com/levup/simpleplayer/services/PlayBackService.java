@@ -63,7 +63,7 @@ public class PlayBackService extends Service implements
         if (intent.getAction().equals(ACTION_PLAY)) {
             try {
                 mMediaPlayer = new MediaPlayer();
-                mMediaPlayer.setDataSource(this, getSongs());
+                mMediaPlayer.setDataSource(this, getSongRealmList());
                 mMediaPlayer.setOnPreparedListener(this);
                // mMediaPlayer.prepareAsync();
             } catch (Exception e) {

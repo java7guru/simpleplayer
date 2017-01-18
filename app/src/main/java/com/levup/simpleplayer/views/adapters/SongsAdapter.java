@@ -1,4 +1,4 @@
-package com.levup.simpleplayer.views;
+package com.levup.simpleplayer.views.adapters;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -45,7 +45,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongViewHold
     @Override
     public SongViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        final View view = layoutInflater.inflate(R.layout.item_main_song, parent, false);
+        final View view = layoutInflater.inflate(R.layout.view_item_main_song, parent, false);
         return new SongViewHolder(view);
     }
 
@@ -78,11 +78,11 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongViewHold
 
         private void bind(@NonNull Song song) {
             mSong = song;
-            mArtistTextView.setText(song.artistName);
-            mTitleTextView.setText(song.title);
+            mArtistTextView.setText(song.getArtistName());
+            mTitleTextView.setText(song.getTitle());
             String cover = SongsRepository.getAlbumCover(
                     itemView.getContext(),
-                    song.albumId);
+                    song.getAlbumId());
             Glide
                     .with(itemView.getContext())
                     .load(cover)

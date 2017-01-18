@@ -18,19 +18,12 @@ import com.levup.simpleplayer.presenters.SongsPresenter;
 import com.levup.simpleplayer.views.MenuActivity;
 import com.levup.simpleplayer.views.MusicActivity;
 import com.levup.simpleplayer.views.MusicActivity.PlayBackInteraction;
-import com.levup.simpleplayer.views.SongsAdapter;
+import com.levup.simpleplayer.views.adapters.SongsAdapter;
 import com.levup.simpleplayer.views.SongsView;
 
 import java.util.List;
 
-import rx.Completable;
 import rx.Observable;
-import rx.Scheduler;
-import rx.Single;
-import rx.Subscriber;
-import rx.exceptions.MissingBackpressureException;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * A simple {@link Fragment} subclass.
