@@ -11,19 +11,24 @@ import android.view.ViewGroup;
 
 import com.levup.simpleplayer.R;
 import com.levup.simpleplayer.models.PlayListModel;
-import com.levup.simpleplayer.presenters.PlayListRepository;
+import com.levup.simpleplayer.models.Song;
+import com.levup.simpleplayer.presenters.PlayListPresenter;
+import com.levup.simpleplayer.repositories.PlayListRepository;
+import com.levup.simpleplayer.views.PlayListView;
+
+import java.util.List;
 
 import rx.Single;
 import rx.SingleSubscriber;
-import rx.Subscription;
-import rx.functions.Action1;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PlayListsFragment extends Fragment {
+public class PlayListsFragment extends Fragment implements PlayListView {
 
     private RecyclerView mRecyclerView;
+
+    private PlayListPresenter mPresenter = new PlayListPresenter();
 
     public static PlayListsFragment newInstance() {
         Bundle args = new Bundle();
@@ -43,22 +48,18 @@ public class PlayListsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mPresenter.onAttachToView(this);
+        mPresenter.loadPlayList();
+    }
 
-        PlayListRepository repository = new PlayListRepository();
-        Single<PlayListModel> single = repository.loadPlayList();
-        single.subscribe(new SingleSubscriber<PlayListModel>() {
-            @Override
-            public void onSuccess(PlayListModel value) {
+    @Override
+    public void onPlayListLoaded(List<Song> songs) {
 
+    }
 
-            }
-
-            @Override
-            public void onError(Throwable error) {
-
-            }
-        });
-
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.onDetach();
     }
 }

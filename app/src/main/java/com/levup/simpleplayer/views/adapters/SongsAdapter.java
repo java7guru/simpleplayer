@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.levup.simpleplayer.R;
 import com.levup.simpleplayer.models.Song;
-import com.levup.simpleplayer.presenters.SongsRepository;
+import com.levup.simpleplayer.repositories.SongsRepository;
 
 import java.util.List;
 
