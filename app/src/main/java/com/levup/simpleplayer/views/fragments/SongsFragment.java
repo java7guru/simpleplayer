@@ -111,6 +111,15 @@ public class SongsFragment extends Fragment implements SongsView {
             }
 
         });
+        mSongsAdapter.setOnItemLongClickListener(view -> {
+            final SongsAdapter.SongViewHolder holder =
+                    (SongsAdapter.SongViewHolder)
+                            mRecyclerView.findContainingViewHolder(view);
+            if(holder == null) return true;
+            final Song song = holder.getSong();
+            mPresenter.addToPlayList(song);
+            return true;
+        });
         mRecyclerView.setAdapter(mSongsAdapter);
 
 

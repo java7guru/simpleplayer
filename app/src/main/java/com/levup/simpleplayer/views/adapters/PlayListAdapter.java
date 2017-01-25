@@ -33,7 +33,7 @@ public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.PlayLi
     @Override
     public PlayListItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        final View view = inflater.inflate(R.layout.view_item_main_song, parent, false);
+        final View view = inflater.inflate(R.layout.view_item_play_list_song, parent, false);
         return new PlayListItemViewHolder(view);
     }
 
@@ -59,9 +59,9 @@ public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.PlayLi
 
         public PlayListItemViewHolder(View itemView) {
             super(itemView);
-            mCoverImageView = (ImageView) itemView.findViewById(R.id.coverImageView);
-            mArtistTextView = (TextView) itemView.findViewById(R.id.artistTextView);
-            mTitleTextView = (TextView) itemView.findViewById(R.id.titleTextView);
+            mCoverImageView = (ImageView) itemView.findViewById(R.id.ivCover);
+            mArtistTextView = (TextView) itemView.findViewById(R.id.tvArtist);
+            mTitleTextView = (TextView) itemView.findViewById(R.id.tvSong);
         }
 
         private void bind(@NonNull Song song) {

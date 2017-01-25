@@ -55,14 +55,14 @@ public class PlayListRepository {
         });
     }
 
-    private Completable clear() {
+    public Completable clear() {
         return Completable.fromAction(() ->
                 mRealm.executeTransactionAsync(realm ->
             realm.delete(PlayListModel.class)
         ));
     }
 
-    private Single<Song> getNextSongAfter(long id) {
+    public Single<Song> getNextSongAfter(long id) {
         return Single.create(singleSubscriber -> {
            mRealm.executeTransaction(realm -> {
                PlayListModel playList = realm

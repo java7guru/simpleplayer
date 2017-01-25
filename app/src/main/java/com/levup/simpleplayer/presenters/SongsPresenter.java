@@ -2,6 +2,8 @@ package com.levup.simpleplayer.presenters;
 
 import android.support.annotation.NonNull;
 
+import com.levup.simpleplayer.models.Song;
+import com.levup.simpleplayer.repositories.PlayListRepository;
 import com.levup.simpleplayer.repositories.SongsRepository;
 import com.levup.simpleplayer.views.SongsView;
 
@@ -18,6 +20,8 @@ public class SongsPresenter {
 
     private SongsView mView = null;
 
+    private PlayListRepository mPlayListRepository = new PlayListRepository();
+
     public void onAttachToView(@NonNull SongsView songsView) {
         mView = songsView;
     }
@@ -31,6 +35,10 @@ public class SongsPresenter {
                 .subscribe(songs -> { mView.onAllSongsLoaded(songs);},
                         Throwable::printStackTrace);
 
+    }
+
+    public void addToPlayList(Song song) {
+        mPlayListRepository.addSong(song);
     }
 
     public void onDetach() {

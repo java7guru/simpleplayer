@@ -20,11 +20,20 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
+import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding.view.RxViewGroup;
 import com.levup.simpleplayer.R;
 import com.levup.simpleplayer.views.fragments.MainFragment;
 import com.levup.simpleplayer.views.fragments.PlayListsFragment;
 
+import rx.Completable;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func2;
+import rx.observables.BlockingObservable;
+import rx.observables.ConnectableObservable;
+import rx.schedulers.Schedulers;
+import rx.subjects.PublishSubject;
 
 
 public class MenuActivity extends MusicActivity

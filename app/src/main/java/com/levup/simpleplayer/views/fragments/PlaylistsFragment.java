@@ -15,6 +15,7 @@ import com.levup.simpleplayer.models.Song;
 import com.levup.simpleplayer.presenters.PlayListPresenter;
 import com.levup.simpleplayer.repositories.PlayListRepository;
 import com.levup.simpleplayer.views.PlayListView;
+import com.levup.simpleplayer.views.adapters.PlayListAdapter;
 
 import java.util.List;
 
@@ -54,7 +55,9 @@ public class PlayListsFragment extends Fragment implements PlayListView {
 
     @Override
     public void onPlayListLoaded(List<Song> songs) {
-
+        PlayListAdapter adapter = new PlayListAdapter();
+        adapter.setDataSource(songs);
+        mRecyclerView.setAdapter(adapter);
     }
 
     @Override
