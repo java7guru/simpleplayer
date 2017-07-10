@@ -8,6 +8,12 @@
     android:layout_width="match_parent"
     android:layout_height="80dp">
 
+    <View
+        android:id="@+id/vProgress"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="#6affffff"/>
+
     <ImageView
         android:layout_centerVertical="true"
         android:layout_marginLeft="20dp"

@@ -25,6 +25,14 @@ public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.PlayLi
 
     private List<Song> mDataSource = null;
 
+    private RecyclerView mRecyclerView;
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRecyclerView = recyclerView;
+    }
+
     public void setDataSource(List<Song> songs) {
         mDataSource = songs;
         notifyDataSetChanged();
@@ -55,6 +63,7 @@ public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.PlayLi
         private ImageView mCoverImageView;
         private TextView mArtistTextView;
         private TextView mTitleTextView;
+        private View mProgressView;
 
 
         public PlayListItemViewHolder(View itemView) {
@@ -62,6 +71,7 @@ public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.PlayLi
             mCoverImageView = (ImageView) itemView.findViewById(R.id.ivCover);
             mArtistTextView = (TextView) itemView.findViewById(R.id.tvArtist);
             mTitleTextView = (TextView) itemView.findViewById(R.id.tvSong);
+            mProgressView = itemView.findViewById(R.id.vProgress);
         }
 
         private void bind(@NonNull Song song) {
@@ -78,6 +88,7 @@ public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.PlayLi
                     .placeholder(new ColorDrawable(Color.GRAY))
                     .crossFade()
                     .into(mCoverImageView);
+            mProgressView.setX(-mRecyclerView.getMeasuredWidth());
         }
 
         public Song getSong() {
